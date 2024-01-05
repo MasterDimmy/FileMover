@@ -3,13 +3,12 @@ package main
 import (
 	"flag"
 	"fmt"
-	"io"
 	"os"
 	"path/filepath"
 )
 
 func main() {
-	fmt.Println("Сканирует указанный каталог, на основе даты изменения файлов создает каталог YYYY/MM и переносит в него файлы.")	
+	fmt.Println("Сканирует указанный каталог, на основе даты изменения файлов создает YYYY/MM там же и переносит туда файлы.")	
 
 	// Флаг для указания каталога
 	dirPtr := flag.String("dir", ".", "directory to scan")
@@ -53,32 +52,11 @@ func main() {
 	}
 }
 
-// moveFile перемещает файл из одного места в другое
 func moveFile(src, dst string) error {
-	fmt.Printf("%s => %s\n",src,dst)
-	err := func() error {
-		input, err := os.Open(src)
-		if err != nil {
-			return err
-		}
-		defer input.Close()
+    fmt.Printf("%s => %s\n",src,dst)
 
-		output, err := os.Create(dst)
-		if err != nil {
-			return err
-		}
-		defer output.Close()
-
-		_, err = io.Copy(output, input)
-		if err != nil {
-			return err
-		}
-		return nil
-	}()
-	if err!=nil {
-		return err
-	}
-
-	return os.Remove(src)
+    return os.Rename(src, dst)
 }
+
+
 
